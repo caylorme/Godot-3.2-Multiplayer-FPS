@@ -1,5 +1,9 @@
 extends Node
 
+# Here we can specify the public IP address for playing through the internet.
+export var ip : String = "localhost"
+
+# Port must be the same as the server's.
 const PORT = 27015
 
 var client : NetworkedMultiplayerENet
@@ -11,8 +15,11 @@ onready var world = $world
 
 onready var player_scn = preload("res://scenes/player/player.tscn")
 onready var puppet_scn = preload("res://scenes/player/puppet.tscn")
+onready var bot_scn = preload("res://scenes/player/bot.tscn")
 
 func _ready():
+	get_tree().set_auto_accept_quit(false)
+	
 	get_tree().connect("network_peer_connected", self, "_player_connected")
 	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
 	get_tree().connect("connected_to_server", self, "_on_connected_to_server")
@@ -20,8 +27,11 @@ func _ready():
 	get_tree().connect("server_disconnected", self, "_on_server_disconnected")
 	$ui/button.connect("pressed", self, "_on_connect_pressed")
 	
-	create_map()
+#	create_map()
 	client = NetworkedMultiplayerENet.new()
+	
+	# Set MSAA
+	get_viewport().msaa = Viewport.MSAA_2X
 
 func _on_connection_failed():
 	display_message("Connection failed!")
@@ -56,16 +66,16 @@ func _player_disconnected(id):
 func _on_connect_pressed():
 	$ui/button.visible = false
 	display_message("Connecting...")
-	var ip = "localhost"
 	if !ip.is_valid_ip_address():
 		display_message("IP is invalid!")
 	client.create_client(ip, PORT)
 	get_tree().set_network_peer(client)
 
-func create_map():
-	# Map
-	var map = load("scenes/map.tscn").instance()
-	world.add_child(map)
+#func create_map():
+#	# Map
+#	var map = load("scenes/maps/map.tscn").instance()
+#	world.add_child(map)
+#	get_viewport().msaa = Viewport.MSAA_2X
 
 func display_message(text : String):
 	$ui/message.visible = true
@@ -73,3 +83,13 @@ func display_message(text : String):
 	yield(get_tree().create_timer(5), "timeout")
 	$ui/message.visible = false
 	$ui/message.text = ""
+
+func _notification(what):
+	if what == MainLoop.NOTIFICATION_WM_QUIT_REQUEST:
+		get_tree().quit()
+
+puppet func create_bots(bots):
+	for n in bots:
+		var bot = bot_scn.instance()
+		world.get_node("bots").add_child(bot)
+		bot.name = n

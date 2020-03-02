@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://scripts/main.gd" type="Script" id=1]
+[ext_resource path="res://scenes/maps/map.tscn" type="PackedScene" id=2]
 
 [node name="main" type="Node"]
 script = ExtResource( 1 )
@@ -26,9 +27,13 @@ __meta__ = {
 
 [node name="players" type="Node" parent="world"]
 
+[node name="bots" type="Node" parent="world"]
+
 [node name="effects" type="Node" parent="world"]
 
 [node name="camera" type="Camera" parent="world"]
-transform = Transform( 0.834388, 0.426206, -0.349493, 0, 0.634084, 0.773264, 0.551178, -0.645202, 0.529072, 4.21967, 26.7781, 14.4781 )
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 10, 50, 25 )
 current = true
 far = 1000.0
+
+[node name="map" parent="world" instance=ExtResource( 2 )]
