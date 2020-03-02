@@ -46,12 +46,18 @@ Credits
 =======
 
 Uses Gonkee's joystick script for Godot 3 https://youtu.be/uGyEP2LUFPg
+
 Characters and animations by mixamo.com
+
 Touchscreen buttons by xelu https://opengameart.org/content/free-keyboard-and-controllers-prompts-pack
+
 Sounds:
 https://sonniss.com/gameaudiogdc2017/
+
 https://freesound.org/people/monte32/sounds/353799/
+
 https://freesound.org/people/mickyman5000/sounds/340493/
+
 
 Thank you
 =========
