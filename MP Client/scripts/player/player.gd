@@ -129,6 +129,10 @@ func process_input(delta):
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
+	# Recapture the mouse on left click
+	if Input.is_action_just_pressed("primary_fire") and Input.get_mouse_mode() == Input.MOUSE_MODE_VISIBLE:
+		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	
 	# Touch movement
 	if touch_mode:
 		input_movement_vector.x = left_ball.get_value().x
