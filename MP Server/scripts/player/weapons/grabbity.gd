@@ -11,12 +11,12 @@ var can_release : bool = false
 var grabbity_target : RigidBody
 
 func _ready():
-	grabbity_cooldown.connect("timeout", self, "_on_grabbity_timeout")
+	var _grabbity_timeout = grabbity_cooldown.connect("timeout", self, "_on_grabbity_timeout")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# Firing
 	process_commands()
-	process_grabbity(delta)
+	process_grabbity()
 
 func process_commands():
 	if visible:
@@ -47,7 +47,7 @@ func grab(pull : bool, release : bool, throw : bool):
 			if result:
 				if result.collider is RigidBody:
 					var dir = pin.global_transform.basis.z.normalized()
-					var pos = (global_transform.origin - result.collider.global_transform.origin).normalized()
+#					var pos = (global_transform.origin - result.collider.global_transform.origin).normalized()
 					if result.collider.global_transform.origin.distance_to(shooter.global_transform.origin) > 3:
 						result.collider.linear_velocity = dir * 8
 						rpc_unreliable("grab", true, false, false)
@@ -84,7 +84,7 @@ func grab(pull : bool, release : bool, throw : bool):
 		can_grab = false
 		grabbity_cooldown.start()
 
-func process_grabbity(delta):
+func process_grabbity():
 	if grabbity_target != null:
 #		grabbity_target.global_transform.origin = pin.global_transform.origin
 		grabbity_target.grabbed = true

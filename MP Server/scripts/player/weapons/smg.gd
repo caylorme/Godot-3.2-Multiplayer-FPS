@@ -10,7 +10,7 @@ const KNOCKBACK = 5
 func _ready():
 	timer_fire.connect("timeout", self, "_on_fire_timeout")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# Fix
 	process_commands()
 
@@ -46,7 +46,7 @@ func fire_gun():
 		if result.collider is StaticBody:
 			rpc_unreliable("create_impact", game.world.get_path(), result.position, result.normal, get_material_name(result.collider))
 		if result.collider is BasePlayer:
-			result.collider.hit(10, shooter, result.position, result.normal)
+			result.collider.hit(10, shooter, result.position)
 			result.collider.set_velocity(dir * KNOCKBACK)
 #			rpc_unreliable("create_impact", result.collider.get_path(), result.position, result.normal)
 	timer_fire.start()

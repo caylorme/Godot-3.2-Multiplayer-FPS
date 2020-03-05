@@ -4,13 +4,13 @@ class_name Bot
 # This is a bot.
 
 func _ready():
-	connect("state_changed", self, "_on_state_changed")
+	var _state_changed = connect("state_changed", self, "_on_state_changed")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	$head/holder.global_transform = $character/skeleton/bone_attachment/holder.global_transform
 	anim_tree["parameters/aim_y/add_amount"] = head.rotation.x
 
-func _on_state_changed(s, b):
+func _on_state_changed(s, _b):
 	match s:
 		"dead":
 			if state[s]:
@@ -23,16 +23,16 @@ func _on_state_changed(s, b):
 				$shape.disabled = false
 				$character/skeleton.physical_bones_stop_simulation()
 
-func process_commands(delta):
+func process_commands(_delta):
 	pass
 
-func process_movement(delta):
+func process_movement(_delta):
 	pass
 
 func check_pos_on_server():
 	pass
 
-func process_rotations(x : float, y : float):
+func process_rotations(_x : float, _y : float):
 	pass
 
 # Here we are updating the position, rotation, head rotation, velocity, acceleration and input vector

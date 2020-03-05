@@ -23,8 +23,8 @@ func _ready():
 	server.create_server(PORT, MAX_PLAYERS)
 	get_tree().set_network_peer(server)
 	
-	get_tree().connect("network_peer_connected", self, "_client_connected")
-	get_tree().connect("network_peer_disconnected", self, "_client_disconnected")
+	var _client_connected = get_tree().connect("network_peer_connected", self, "_on_client_connected")
+	var _client_disconnected = get_tree().connect("network_peer_disconnected", self, "_on_client_disconnected")
 	
 #	generator.connect("level_generated", self, "_on_level_generated")
 	
@@ -40,7 +40,7 @@ func _ready():
 		bot.name = str(world.get_node("bots").get_children().size())
 		bots.push_back(bot.name)
 
-func _client_connected(id):
+func _on_client_connected(id):
 	message.text = "Client " + str(id) + " connected."
 	var player = load("res://scenes/player/player.tscn").instance()
 	player.set_name(str(id))
@@ -60,7 +60,7 @@ func _client_connected(id):
 #		# Push player to buffer for later spawning
 #		player_buffer.push_back(player)
 
-func _client_disconnected(id):
+func _on_client_disconnected(id):
 	message.text = "Client " + str(id) + " disconnected."
 	for p in world.get_node("players").get_children():
 		if int(p.name) == id:

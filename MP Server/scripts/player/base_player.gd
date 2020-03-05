@@ -87,11 +87,11 @@ func _ready():
 	camera = get_node("head/camera")
 	head = get_node("head")
 	set_health(MAX_HEALTH)
-	get_node("timers/respawn").connect("timeout", self, "_on_respawn_timeout")
-	get_node("timers/footstep").connect("timeout", self, "_on_footstep_timeout")
-	get_node("timers/send_pos").connect("timeout", self, "_on_send_pos_timeout")
-	get_node("timers/send_puppet").connect("timeout", self, "_on_send_puppet_timeout")
-	get_tree().connect("network_peer_connected", self, "_on_player_connected")
+	var _respawn_timeout = get_node("timers/respawn").connect("timeout", self, "_on_respawn_timeout")
+	var _footstep_timeout = get_node("timers/footstep").connect("timeout", self, "_on_footstep_timeout")
+	var _send_pos_timeout = get_node("timers/send_pos").connect("timeout", self, "_on_send_pos_timeout")
+	var _send_puppet_timeout = get_node("timers/send_puppet").connect("timeout", self, "_on_send_puppet_timeout")
+	var _player_connected = get_tree().connect("network_peer_connected", self, "_on_player_connected")
 	rpc("update_vars", vars)
 	weapons = get_node("head/holder").get_children()
 	equip_weapon(active_weapon_index)
@@ -102,7 +102,7 @@ func _physics_process(delta):
 	
 	# Fall damage
 	if vel.y - pvel.y >= 30:
-		hit(100, null, null, null)
+		hit(100, null, null)
 	pvel = vel
 	
 	# Footsteps
@@ -140,7 +140,7 @@ func _physics_process(delta):
 	# Update other player representations
 	update_puppets()
 	
-func process_commands(delta):
+func process_commands(_delta):
 	dir = Vector3()
 	var cam_xform = camera.get_global_transform()
 	if !touch_mode:
@@ -231,7 +231,7 @@ func set_health(value):
 	if health <= 0 and !state.dead:
 		die()
 
-func hit(damage, dealer, pos, norm):
+func hit(damage, dealer, pos):
 	set_health(health - damage)
 	rpc("hit")
 	rpc_unreliable("create_blood", pos)
@@ -320,7 +320,7 @@ remote func register_kick():
 	
 func kick():
 	var screen_center = get_viewport().size / 2
-	var state = get_world().direct_space_state
+	var space_state = get_world().direct_space_state
 	var from : Vector3
 	var to : Vector3
 	if has_method("check_player"):
@@ -329,7 +329,7 @@ func kick():
 	if has_method("check_bot"):
 		from = camera.global_transform.origin
 		to = from + camera.global_transform.basis.z * -1
-	var result = state.intersect_ray(from, to, [self, active_weapon], 1, true, false)
+	var result = space_state.intersect_ray(from, to, [self, active_weapon], 1, true, false)
 	if result:
 		var dir = -camera.global_transform.basis.z.normalized()
 		var pos = (global_transform.origin - result.collider.global_transform.origin).normalized()
@@ -338,7 +338,7 @@ func kick():
 		if result.collider is RigidBody:
 			result.collider.apply_impulse(pos, dir * 2)
 		if result.collider is KinematicBody and result.collider.has_method("hit"):
-			result.collider.hit(100, self, result.position, result.normal)
+			result.collider.hit(100, self, result.position)
 			result.collider.set_velocity(dir * 2)
 
 func update_puppets():
@@ -358,6 +358,6 @@ func equip_weapon(index):
 	active_weapon_index = index
 	rpc("equip_weapon", index)
 
-func _on_player_connected(id):
+func _on_player_connected(_id):
 	rpc("update_states", state)
 	rpc("equip_weapon", active_weapon_index)

@@ -13,7 +13,7 @@ var can_fire : bool = true
 func _ready():
 	timer_cooldown.connect("timeout", self, "_on_fire_timeout")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	process_commands()
 
 func process_commands():
@@ -51,7 +51,7 @@ func fire_gun():
 			if result.collider is StaticBody:
 				rpc_unreliable("create_impact", game.world.get_path(), result.position, result.normal, get_material_name(result.collider))
 			if result.collider is BasePlayer:
-				result.collider.hit(25, shooter, result.position, result.normal)
+				result.collider.hit(25, shooter, result.position)
 				result.collider.set_velocity(dir * KNOCKBACK)
 	timer_cooldown.start()
 	if shooter.state.grounded == false:

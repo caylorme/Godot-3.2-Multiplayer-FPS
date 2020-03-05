@@ -19,7 +19,7 @@ const AIM_RAY = 1000
 
 func _ready():
 	$character.set_visible_to_camera(false)
-	connect("state_changed", self, "_on_state_changed")
+	var _state_changed = connect("state_changed", self, "_on_state_changed")
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	touch_mode = OS.has_touchscreen_ui_hint()
 	if touch_mode:
@@ -39,7 +39,7 @@ func _physics_process(delta):
 		else:
 			aim_target = null
 		
-func _on_state_changed(s, b):
+func _on_state_changed(s, _b):
 	match s:
 		"dead":
 			holder.visible = !state[s]
@@ -64,10 +64,10 @@ func _on_state_changed(s, b):
 				$sounds/water.stop()
 				AudioServer.set_bus_effect_enabled(1, 0, false)
 
-puppet func update_puppet(pos : Vector3, rot : Vector3, h_rot : Vector3, v : Vector3, a : float, imv : Vector2):
+puppet func update_puppet(_pos : Vector3, _rot : Vector3, _h_rot : Vector3, _v : Vector3, _a : float, _imv : Vector2):
 	pass
 
-func process_input(delta):
+func process_input(_delta):
 	# Input
 	if Input.is_action_pressed("move_forward"):
 		cmd.move_forward = true
@@ -148,7 +148,7 @@ func _input(event):
 	# Aim helper
 	if touch_mode and !state.dead:
 		if event != InputEventScreenDrag and event is InputEventScreenTouch:
-			var screen_center = get_viewport().size / 2
+#			var screen_center = get_viewport().size / 2
 			var state = get_world().direct_space_state
 			var from = camera.project_ray_origin(event.position)
 			var to = from + camera.project_ray_normal(event.position) * AIM_RAY

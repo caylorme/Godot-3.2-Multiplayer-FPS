@@ -16,11 +16,11 @@ puppet func update(pos : Vector3, rot : Vector3):
 	rotation = rot
 
 # Emit sound when object has hit something.
-puppet func play_hit_sound(lvl : float, material_name : String):
+puppet func play_hit_sound(_lvl : float, material_name : String):
 	var new_hit_player = AudioStreamPlayer3D.new()
 	add_child(new_hit_player)
 	new_hit_player.global_transform.origin = global_transform.origin
-	#new_hit_player.unit_size = lvl
+#	new_hit_player.unit_size = _lvl
 	new_hit_player.stream = preloader.hit_sounds[material_name][randi() % preloader.hit_sounds[material_name].size() - 1]
 	new_hit_player.play()
 	yield(get_tree().create_timer(5), "timeout")

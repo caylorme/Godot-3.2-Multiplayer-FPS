@@ -3,7 +3,7 @@ class_name StackFSM
 
 var stack : Array
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	var current_state = get_current_state()
 	if current_state != null:
 		if get_parent().has_method(current_state):
