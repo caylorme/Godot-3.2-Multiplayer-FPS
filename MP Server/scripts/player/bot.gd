@@ -28,7 +28,7 @@ var point : Vector3
 var path : PoolVector3Array
 
 func _ready():
-	think_timer.connect("timeout", self, "_on_think_end")
+	var _think_timeout = think_timer.connect("timeout", self, "_on_think_end")
 	brain = StackFSM.new()
 	add_child(brain)
 	brain.push_state("idle", null)
@@ -44,7 +44,7 @@ func _ready():
 	bots_container = game.world.get_node("bots")
 	players_container = game.world.get_node("players")
 
-func _process(delta):
+func _process(_delta):
 	pass
 
 func _physics_process(delta):
@@ -209,8 +209,8 @@ func attack(target):
 			cmd.kick = false
 			brain.pop_state()
 
-func hit(damage, dealer, pos, norm):
-	.hit(damage, dealer, pos, norm)
+func hit(damage, dealer, pos):
+	.hit(damage, dealer, pos)
 	if dealer is KinematicBody and !brain.has_state("aware"):
 		brain.push_state("aware", dealer)
 
@@ -235,8 +235,8 @@ func look_at_target(target):
 	if is_instance_valid(target):
 		head.look_at(Vector3(target.translation.x, target.translation.y, target.translation.z), Vector3.UP)
 
-func look_at_point(point):
-	head.look_at(Vector3(point.x, translation.y, point.z), Vector3.UP)
+func look_at_point(p):
+	head.look_at(Vector3(p.x, translation.y, p.z), Vector3.UP)
 
 func _on_think_end():
 	thinking = false

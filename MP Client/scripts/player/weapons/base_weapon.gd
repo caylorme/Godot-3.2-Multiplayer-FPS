@@ -9,7 +9,7 @@ var shooter : BasePlayer
 func _ready():
 	shooter = get_owner()
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	pass
 
 puppet func create_impact(parent_path : String, pos : Vector3, norm : Vector3, material : String):

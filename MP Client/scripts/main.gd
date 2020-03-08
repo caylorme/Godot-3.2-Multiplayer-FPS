@@ -20,12 +20,12 @@ onready var bot_scn = preload("res://scenes/player/bot.tscn")
 func _ready():
 	get_tree().set_auto_accept_quit(false)
 	
-	get_tree().connect("network_peer_connected", self, "_player_connected")
-	get_tree().connect("network_peer_disconnected", self, "_player_disconnected")
-	get_tree().connect("connected_to_server", self, "_on_connected_to_server")
-	get_tree().connect("connection_failed", self, "_on_connection_failed")
-	get_tree().connect("server_disconnected", self, "_on_server_disconnected")
-	$ui/button.connect("pressed", self, "_on_connect_pressed")
+	var _player_connected = get_tree().connect("network_peer_connected", self, "_on_player_connected")
+	var _player_disconnected = get_tree().connect("network_peer_disconnected", self, "_on_player_disconnected")
+	var _connected_to_server = get_tree().connect("connected_to_server", self, "_on_connected_to_server")
+	var _connection_failed = get_tree().connect("connection_failed", self, "_on_connection_failed")
+	var _server_disconnected = get_tree().connect("server_disconnected", self, "_on_server_disconnected")
+	var _button_pressed = $ui/button.connect("pressed", self, "_on_connect_pressed")
 	
 #	create_map()
 	client = NetworkedMultiplayerENet.new()
@@ -51,13 +51,13 @@ func _on_connected_to_server():
 func _on_server_disconnected():
 	display_message("Server disconnected.")
 
-func _player_connected(id):
+func _on_player_connected(id):
 	if me_created:
 		var player = puppet_scn.instance()
 		player.set_name(str(id))
 		world.get_node("players").add_child(player)
 
-func _player_disconnected(id):
+func _on_player_disconnected(id):
 	for n in world.get_node("players").get_children():
 		if int(n.name) == id:
 			world.get_node("players").remove_child(n)
@@ -68,7 +68,7 @@ func _on_connect_pressed():
 	display_message("Connecting...")
 	if !ip.is_valid_ip_address():
 		display_message("IP is invalid!")
-	client.create_client(ip, PORT)
+	var _client_created = client.create_client(ip, PORT)
 	get_tree().set_network_peer(client)
 
 #func create_map():

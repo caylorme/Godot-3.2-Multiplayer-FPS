@@ -98,7 +98,7 @@ func _physics_process(delta):
 	
 	check_pos_on_server()
 
-func process_commands(delta):
+func process_commands(_delta):
 	dir = Vector3()
 	var cam_xform = camera.get_global_transform()
 	if !touch_mode:

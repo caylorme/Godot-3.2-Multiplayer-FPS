@@ -15,7 +15,7 @@ func _ready():
 	head = shooter.get_node("head")
 	camera = shooter.get_node("head/camera")
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	# Fix
 	if !visible:
 		cmd.primary_fire = false

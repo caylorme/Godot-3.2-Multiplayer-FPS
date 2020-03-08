@@ -5,7 +5,7 @@ onready var flash = get_node("flash")
 onready var flash_timer = get_node("flash/timer")
 
 func _ready():
-	flash_timer.connect("timeout", self, "_on_flash_timeout")
+	var _flash_timeout = flash_timer.connect("timeout", self, "_on_flash_timeout")
 
 puppet func fire():
 	get_node("sounds/fire").play()

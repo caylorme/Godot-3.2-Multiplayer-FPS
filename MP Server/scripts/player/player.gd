@@ -4,7 +4,7 @@ class_name Player
 func _ready():
 	pass
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	pass
 	
 func process_commands(delta):

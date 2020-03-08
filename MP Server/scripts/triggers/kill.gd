@@ -3,7 +3,7 @@ extends Area
 # Level bounds that kills the player and respawns props
 
 func _ready():
-	connect("body_entered", self, "_on_body_entered")
+	var _body_entered = connect("body_entered", self, "_on_body_entered")
 
 func _on_body_entered(body):
 	if body is Prop:
